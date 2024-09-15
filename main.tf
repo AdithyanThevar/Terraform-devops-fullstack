@@ -59,3 +59,8 @@ resource "aws_instance" "test_Server" {
     Name = "TestServer"
   }
 }
+
+output "instance_public_ip" {
+  description = "The public IP of the instance"
+  value       = aws_instance.test_Server.public_ip
+}
