@@ -28,7 +28,6 @@ services:
       DB_PASSWORD: "mypassword"
       DB_NAME: "mydatabase"
       DB_PORT: "5432"
-      ALLOWED_ORIGINS: "http://$(curl -Ss ipinfo.io | grep '\"ip\"' | awk '{print $2}' | cut -d '\"' -f 2)"
     ports:
       - "8080:8080"
     depends_on:
@@ -40,8 +39,6 @@ services:
   frontend:
     image: frontend-image:latest 
     container_name: frontend-app
-    environment:
-      REACT_APP_SERVER_URL: "http://$(curl -Ss ipinfo.io | grep '\"ip\"' | awk '{print $2}' | cut -d '\"' -f 2)/employees"
     ports:
       - "3000:80"
     depends_on:
