@@ -1,0 +1,83 @@
+---
+- name: Docker Build and Compose
+  hosts: all 
+  become: yes
+  vars:
+    project_dir: /var/lib/jenkins/workspace/test/fullstack-app     
+    compose_file: docker-compose.yml         
+    nginx_conf_source: /var/lib/jenkins/workspace/test/nginx.conf   
+    nginx_conf_dest: /etc/nginx/nginx.conf     
+    remote_project_dir: /opt/project/fullstack-app
+    app_config_file: '{{ remote_project_dir }}/frontend/.env'
+    frontend_app: '{{ remote_project_dir }}/frontend'
+    backend_app: '{{ remote_project_dir }}/backend'
+
+  tasks:
+    - name: Create remote project directory
+      file:
+        path: "{{ remote_project_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy project directory to remote 
+      copy:
+        src: "{{ project_dir }}/"
+        dest: "{{ remote_project_dir }}"
+        owner: root
+        group: root
+        mode: '0755'
+        remote_src: no
+        directory_mode: '0755'
+
+    - name: Replace nginx.conf 
+      copy:
+        src: "{{ nginx_conf_source }}"
+        dest: "{{ nginx_conf_dest }}"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Restart Nginx 
+      service:
+        name: nginx
+        state: restarted
+
+    - name: Get the public IP of the server
+      shell: |
+        curl -s ipinfo.io | grep '"ip":' | awk -F': ' '{print $2}' | tr -d '",'
+      register: public_ip
+      ignore_errors: yes
+
+    - name: Replace the public IP in the app file
+      replace:
+        path: "{{ app_config_file }}"
+        regexp: '^REACT_APP_SERVER_URL=http://.*'
+        replace: "REACT_APP_SERVER_URL=http://{{ public_ip.stdout }}/employees"
+
+    - name: Build Frontend Docker image
+      command: docker build -t frontend-image .
+      args:
+        chdir: "{{ frontend_app }}"
+
+    - name: Build Backend Docker image
+      command: docker build -t backend-image .
+      args:
+        chdir: "{{ backend_app }}"
+
+    - name: Run docker-compose
+      command: docker-compose -f "{{ compose_file }}" up -d
+      args:
+        chdir: "{{ backend_app }}"
+
+    - name: Pause for 5 seconds
+      pause:
+        seconds: 5
+
+    - name: Check status
+      command: docker ps
+      register: docker_output
+
+    - name: Verify status
+      debug:
+        msg: "{{ docker_output.stdout_lines }}"
+
