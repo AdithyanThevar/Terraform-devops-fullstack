@@ -16,10 +16,10 @@ services:
       - custom-network
 
   backend:
-    image: backend-image:latest 
+    image: adithyanthevar/gobackendappimage
     container_name: backend-app
     environment:
-      DB_HOST: ${DB_HOST} 
+      DB_HOST: db
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
@@ -33,7 +33,7 @@ services:
       - custom-network 
         
   frontend:
-    image: frontend-image:latest 
+    image: adithyanthevar/nodefrontendappimage
     container_name: frontend-app
     ports:
       - "3000:80"
