@@ -1,9 +1,6 @@
-# Fullstack App
-
+# Employee Management System - Fullstack App
 This project is a fullstack web application consisting of a **React frontend**, a **Go backend**, and a **PostgreSQL database**, all containerized using Docker and orchestrated with Docker Compose.
-
-# Employee Management System
-  It's an application to add and view employee Details.
+It's an application to add and view employee Details.
 
 # Backend
     backend is written in go version 1.19
