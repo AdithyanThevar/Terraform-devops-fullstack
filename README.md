@@ -48,13 +48,13 @@ Also make sure frontend/.env exists:
 
 ### 3. Build Docker Images
 
-** 🔧 Frontend **
+**🔧 Frontend**
 ```bash
 cd frontend
 docker build -t your-dockerhub-username/nodefrontendappimage .
 ```
 
-** 🔧 Backend **
+**🔧 Backend**
 ```bash
 cd ../backend
 docker build -t your-dockerhub-username/gobackendappimage .
@@ -66,12 +66,12 @@ docker build -t your-dockerhub-username/gobackendappimage .
 docker login
 ```
 
-**🚀 Push Frontend Image **
+**🚀 Push Frontend Image**
 ```bash
 docker push your-dockerhub-username/nodefrontendappimage
 ```
 
-**🚀 Push Backend Image **
+**🚀 Push Backend Image**
 ```bash
 docker push your-dockerhub-username/gobackendappimage
 ```
