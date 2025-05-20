@@ -27,7 +27,7 @@ This project is a fullstack web application consisting of a **React frontend**, 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/fullstack-app.git
+git clone https://github.com/AdithyanThevar/Fullstack-App.git
 cd fullstack-app
 ```
 
@@ -60,7 +60,7 @@ cd ../backend
 docker build -t your-dockerhub-username/gobackendappimage .
 ```
 
-**Make sure you're logged in to Docker Hub: **
+**Make sure you're logged in to Docker Hub:**
 
 ```bash
 docker login
